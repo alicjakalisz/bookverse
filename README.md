@@ -72,7 +72,10 @@ Entities + Relationships (Core data model)
 
 Repositories (CRUD interfaces for entities)
 
-DTOs + Mappers (Decouple domain from external representation)
+DTOs + Mappers (Decouple domain from external representation):
+Your mapper builds basic entity structure from DTO.
+The service layer handles fetching relationships from the database.
+This keeps responsibilities clear and avoids partial/inconsistent objects.
 
 Services (Business logic)
 
