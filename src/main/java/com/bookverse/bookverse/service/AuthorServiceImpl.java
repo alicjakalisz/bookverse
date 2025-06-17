@@ -4,7 +4,6 @@ import com.bookverse.bookverse.dto.AuthorDto;
 import com.bookverse.bookverse.mapper.AuthorMapper;
 import com.bookverse.bookverse.model.Author;
 import com.bookverse.bookverse.repository.AuthorRepository;
-import com.bookverse.bookverse.repository.BookRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,13 +16,11 @@ public class AuthorServiceImpl implements AuthorService{
 
     private AuthorRepository authorRepository;
     private AuthorMapper authorMapper;
-    private BookRepository bookRepository;
 
     @Autowired
-    public AuthorServiceImpl(AuthorRepository authorRepository, AuthorMapper authorMapper, BookRepository bookRepository) {
+    public AuthorServiceImpl(AuthorRepository authorRepository, AuthorMapper authorMapper) {
         this.authorRepository = authorRepository;
         this.authorMapper = authorMapper;
-        this.bookRepository = bookRepository;
     }
 
     @Override

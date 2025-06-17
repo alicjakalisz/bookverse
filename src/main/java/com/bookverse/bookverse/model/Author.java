@@ -1,16 +1,18 @@
 package com.bookverse.bookverse.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
 
 import java.util.List;
 
-@Getter
-@Setter
+
 @Builder
 @Entity
+@Data
+@AllArgsConstructor
 public class Author {
 
     @Id
