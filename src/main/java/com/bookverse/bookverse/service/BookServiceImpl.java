@@ -20,13 +20,14 @@ public class BookServiceImpl implements BookService{
     private BookMapper bookMapper;
     private AuthorRepository authorRepository;
     private ReviewRepository reviewRepository;
+    private BookDetailsService bookDetailsService;
 
-    @Autowired
-    public BookServiceImpl(BookRepository bookRepository, BookMapper bookMapper, AuthorRepository authorRepository, ReviewRepository reviewRepository) {
+    public BookServiceImpl(BookRepository bookRepository, BookMapper bookMapper, AuthorRepository authorRepository, ReviewRepository reviewRepository, BookDetailsService bookDetailsService) {
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
         this.authorRepository = authorRepository;
         this.reviewRepository = reviewRepository;
+        this.bookDetailsService = bookDetailsService;
     }
 
     @Override
@@ -57,7 +58,12 @@ public class BookServiceImpl implements BookService{
             entity.setReviews(reviews);
         }
 
+        // 💾 Save the book first to get a generated ID (if not in the fetch method will have null for book it tries to find
         Book saved = bookRepository.save(entity);
+
+        // 📚 Now fetch details using the generated ID (inside will resave the book)
+        bookDetailsService.fetchAndSaveByIsbn(saved.getIsbn(), saved.getId());
+
         return bookMapper.toDto(saved);
     }
 

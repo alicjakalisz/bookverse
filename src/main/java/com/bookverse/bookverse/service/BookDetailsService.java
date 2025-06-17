@@ -10,4 +10,5 @@ public interface BookDetailsService {
     BookDetailsDto create(BookDetailsDto dto);
     BookDetailsDto update(Long id, BookDetailsDto dto);
     void delete(Long id);
+    BookDetailsDto fetchAndSaveByIsbn(String isbn, Long bookId);
 }

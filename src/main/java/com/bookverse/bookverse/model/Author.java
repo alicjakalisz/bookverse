@@ -19,7 +19,8 @@ public class Author {
 
     private String name;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL) // Author is owned by Books so if you remove certain books from Books
+    //table this list will change (wont have these books)
     private List<Book> books;
 
 
