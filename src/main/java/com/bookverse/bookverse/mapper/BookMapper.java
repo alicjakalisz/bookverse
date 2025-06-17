@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class BookMapper implements BaseMapper<BookDto, Book> {
 
     @Autowired
-    private CoverMetaDataMapper coverMetaDataMapper;
+    private BookDetailsMapper bookDetailsMapper;
 
     @Autowired
     private AuthorMapper authorMapper;
@@ -19,14 +19,15 @@ public class BookMapper implements BaseMapper<BookDto, Book> {
 
     @Override
     public BookDto toDto(Book entity) {
+        //DTO is lighter so coverting to dto can be fully done in mappers
         if(entity == null) return null;
         return BookDto.builder().id(entity.getId())
                 .title(entity.getTitle())
                 .isbn(entity.getIsbn())
                 .publicationYear(entity.getPublicationYear())
-                .coverMetaDataDto(coverMetaDataMapper.toDto(entity.getCoverMetaData()))
-                .author(authorMapper.toDto(entity.getAuthor()))
-                .reviews(entity.getReviews().stream().map(r-> reviewMapper.toDto(r)).toList())
+                .bookDetailsDto(bookDetailsMapper.toDto(entity.getBookDetails()))
+                .authorId(entity.getAuthor().getId())
+                .reviewsId(entity.getReviews().stream().map(r-> r.getId()).toList())
                 .build();
 
     }
@@ -35,12 +36,12 @@ public class BookMapper implements BaseMapper<BookDto, Book> {
     public Book toEntity(BookDto dto) {
         if(dto == null) return null;
         return Book.builder().id(dto.getId())
-              //  .author(authorMapper.toEntity(dto.getAuthor()))
+              //LEAVE IT FOR SERVICE and reached from DB  .author(authorMapper.toEntity(dto.getAuthor()))
                 .title(dto.getTitle())
                 .isbn(dto.getIsbn())
                 .publicationYear(dto.getPublicationYear())
-                .coverMetaData(coverMetaDataMapper.toEntity(dto.getCoverMetaDataDto()))
-              //  .reviews(dto.getReviews().stream().map(rdto -> reviewMapper.toEntity(rdto)).toList())
+                .bookDetails(bookDetailsMapper.toEntity(dto.getBookDetailsDto()))
+              //LET IT FOR SERVICE and REACHED through DB  .reviews(dto.getReviews().stream().map(rdto -> reviewMapper.toEntity(rdto)).toList())
                 .build();
 
         //relationships to be rebuilt in service layer

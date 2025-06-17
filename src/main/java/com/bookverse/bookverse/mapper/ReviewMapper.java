@@ -19,7 +19,8 @@ public class ReviewMapper implements BaseMapper<ReviewDto, Review> {
     @Override
     public Review toEntity(ReviewDto dto) {
         if(dto == null) return null;
-        return Review.builder().id(dto.getId())
+        return Review.builder()
+                .id(dto.getId())
                 .content(dto.getContent())
                 .rating(dto.getStars()).build();
         //User, Book to be added in Service layer

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class CoverMetaData {
+public class BookDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +21,8 @@ public class CoverMetaData {
 
     private String imageUrl;
 
-    @OneToOne(mappedBy = "coverMetaData")
+    private String publishDate;
+
+    @OneToOne(mappedBy = "bookDetails") //mappedBy == NOT owning side; Book owns details
     private Book book;
 }

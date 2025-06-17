@@ -19,9 +19,7 @@ public class AuthorMapper implements BaseMapper<AuthorDto, Author> {
     @Override
     public Author toEntity(AuthorDto dto) {
         if(dto == null) return null;
-        //Your mapper builds basic entity structure from DTO (Dto has AuthorId, not the entire Author, you need to make a call to database from service to fetch the author by id and assign it to the entity
-        //The service layer should handle fetching relationships from the database
-        //This keeps responsibilities clear and avoids partial/inconsistent objects
+       //List of Authors books need to be taken from DB at the Service layer
         return Author.builder().id(dto.getId()).name(dto.getName()).build();
     }
 }

@@ -15,9 +15,11 @@ public class BookDto {
 
     private int publicationYear;
 
-    private AuthorDto author;
+    private Long authorId;
 
-    private List<ReviewDto> reviews;
+    private BookDetailsDto bookDetailsDto;
 
-    private CoverMetaDataDto coverMetaDataDto;
+    private List<Long> reviewsId;
+
+
 }
