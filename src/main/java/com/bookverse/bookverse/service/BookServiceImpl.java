@@ -52,7 +52,7 @@ public class BookServiceImpl implements BookService{
         if (bookDto.getReviewsId() != null && !bookDto.getReviewsId().isEmpty()) {
             List<Review> reviews = reviewRepository.findAllById(bookDto.getReviewsId());
             // Set the book reference in each review (important bi-directional relation fix)
-            for (Review review : reviews) {
+            for (Review review : reviews) { // Review owns the book (Review has foreign key of book, Book has mappedBy)
                 review.setBook(entity);
             }
             entity.setReviews(reviews);
@@ -61,7 +61,7 @@ public class BookServiceImpl implements BookService{
         // 💾 Save the book first to get a generated ID (if not in the fetch method will have null for book it tries to find
         Book saved = bookRepository.save(entity);
 
-        // 📚 Now fetch details using the generated ID (inside will resave the book)
+        // 📚 Now fetch details using the generated ID (inside will resave the book) -> DTO with request has ISBN and later on id is generated
         bookDetailsService.fetchAndSaveByIsbn(saved.getIsbn(), saved.getId());
 
         return bookMapper.toDto(saved);
