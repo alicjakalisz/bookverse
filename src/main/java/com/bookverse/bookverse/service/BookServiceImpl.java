@@ -98,4 +98,9 @@ public class BookServiceImpl implements BookService{
         }
         bookRepository.deleteById(id);
     }
+
+    @Override
+    public List<BookDto> searchByTitle(String title){
+       return bookRepository.findBooksByTitle(title).stream().map(book -> bookMapper.toDto(book)).toList();
+    }
 }

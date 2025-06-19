@@ -18,12 +18,12 @@ public class OpenLibraryResponseDto {
 
     private String title;
 
-    @JsonProperty("publish_date") // original name of the field in JSon response is this one so we need to map to publishDate
+    @JsonProperty("publish_date") // original name of the field in JSon response is publish_date so we need to map to publishDate
     private String publishDate;
 
     @JsonProperty("covers")
     private List<Integer> covers;
 
-    @JsonProperty("by_statement")
+    @JsonProperty("by_statement") // original name of the field in JSon response is by_statement so we need to map to description
     private String description;
 }

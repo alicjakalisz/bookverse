@@ -54,4 +54,18 @@ public class AuthorServiceImpl implements AuthorService{
     }
     authorRepository.deleteById(id);
     }
+
+    @Override
+    public AuthorDto update(AuthorDto authorDto) {
+        Long authorId = authorDto.getId();
+        Author existingAuthor = authorRepository.findById(authorId)
+                .orElseThrow(() -> new EntityNotFoundException("Author with id " + authorId + " not found"));
+
+        // Update the fields you want to allow to be changed
+        existingAuthor.setName(authorDto.getName());
+        // If there are other fields, update them here
+
+        Author saved = authorRepository.save(existingAuthor);
+        return authorMapper.toDto(saved);
+    }
 }

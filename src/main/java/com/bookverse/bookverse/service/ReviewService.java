@@ -10,4 +10,5 @@ public interface ReviewService {
     ReviewDto create(ReviewDto reviewDto);
     ReviewDto update(Long id, ReviewDto reviewDto);
     void delete(Long id);
+    List<ReviewDto> searchReviewsOfUser(String userName);
 }

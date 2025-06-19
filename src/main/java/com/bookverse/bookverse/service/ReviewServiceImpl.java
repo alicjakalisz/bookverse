@@ -47,7 +47,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public ReviewDto create(ReviewDto reviewDto) {
         Review entity = reviewMapper.toEntity(reviewDto);
-        // add user, book from db to review entity
+        // add user, book from db to review entity - Review owns book and user (has foreign keys)
         Book bookFound = bookRepository.findById(reviewDto.getBookId()).orElseThrow(() -> new EntityNotFoundException("Book for this review not found"));
         User user = userRepository.findById(reviewDto.getUserId()).orElseThrow(() -> new EntityNotFoundException("User of this review not found"));
         entity.setBook(bookFound);
@@ -71,5 +71,12 @@ public class ReviewServiceImpl implements ReviewService{
             throw new EntityNotFoundException();
         }
         reviewRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ReviewDto> searchReviewsOfUser(String userName) {
+       return reviewRepository.findAllByUserName(userName).stream().map(
+               review -> reviewMapper.toDto(review)).toList();
+
     }
 }

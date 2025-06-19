@@ -10,4 +10,5 @@ public interface BookService {
     BookDto create(BookDto bookDto);
     BookDto update(Long id, BookDto bookDto);
     void delete(Long id);
+    List<BookDto> searchByTitle(String title);
 }
