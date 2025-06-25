@@ -17,6 +17,7 @@ spring:
       settings:
         trace: true
       path: /h2-console
+#      localhost:8080/h2-console
 
   flyway:
     enabled: false  # 👈 TEMPORARILY DISABLE FLYWAY UNTIL DB IS STABLE
