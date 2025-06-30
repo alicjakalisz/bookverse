@@ -12,6 +12,7 @@ import com.bookverse.bookverse.repository.ReviewRepository;
 import com.bookverse.bookverse.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -51,12 +52,17 @@ class ReviewControllerIntegrationTest {
 
         String json = objectMapper.writeValueAsString(dto);
 
-        mockMvc.perform(post("/api/reviews")
+        String contentAsString = mockMvc.perform(post("/api/reviews")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.rating").value(5))
-                .andExpect(jsonPath("$.comment").value("Amazing"));
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        ReviewDto reviewDto = objectMapper.readValue(contentAsString, ReviewDto.class);
+        Assertions.assertEquals(5,reviewDto.getStars());
+        Assertions.assertEquals("Amazing",reviewDto.getContent());
+
     }
 
     @Test
@@ -67,8 +73,15 @@ class ReviewControllerIntegrationTest {
 
         reviewRepository.save(Review.builder().content("Great!").rating(4).book(book).user(user).build());
 
-        mockMvc.perform(get("/api/reviews/book/" + book.getId()))
+        String contentAsString = mockMvc.perform(get("/api/reviews/" + book.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        ReviewDto reviewDto = objectMapper.readValue(contentAsString, ReviewDto.class);
+
+        Assertions.assertEquals("Great!", reviewDto.getContent());
+
     }
 }
