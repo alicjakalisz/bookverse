@@ -101,6 +101,7 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public List<BookDto> searchByTitle(String title){
-       return bookRepository.findBooksByTitle(title).stream().map(book -> bookMapper.toDto(book)).toList();
+        String searchedTitle = "%" + title + "%"; //JPA doest not have typicall LIKE
+       return bookRepository.findBooksByTitle(searchedTitle).stream().map(book -> bookMapper.toDto(book)).toList();
     }
 }

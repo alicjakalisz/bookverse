@@ -1,16 +1,14 @@
 package com.bookverse.bookverse.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.*;
 
 
 @Entity
 @Builder
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookDetails {
 
     @Id

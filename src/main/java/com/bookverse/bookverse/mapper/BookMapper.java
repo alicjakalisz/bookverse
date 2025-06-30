@@ -5,6 +5,8 @@ import com.bookverse.bookverse.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Component
 public class BookMapper implements BaseMapper<BookDto, Book> {
 
@@ -27,7 +29,7 @@ public class BookMapper implements BaseMapper<BookDto, Book> {
                 .publicationYear(entity.getPublicationYear())
                 .bookDetailsDto(bookDetailsMapper.toDto(entity.getBookDetails()))
                 .authorId(entity.getAuthor().getId())
-                .reviewsId(entity.getReviews().stream().map(r-> r.getId()).toList())
+                .reviewsId(entity.getReviews()==null? new ArrayList<>():entity.getReviews().stream().map(r-> r.getId()).toList())
                 .build();
 
     }

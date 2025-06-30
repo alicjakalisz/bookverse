@@ -33,7 +33,7 @@ class UserControllerIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper; //out of the box with Spring as a bean
 
     @Test
     void createUser_ShouldReturnCreatedUser() throws Exception {
@@ -94,6 +94,45 @@ class UserControllerIntegrationTest {
         Assertions.assertFalse(userRepository.existsById(user.getId()));
     }
 
-    // Możesz dopisać testy update i getAll
+
+    @Test
+    void getAllUsers_ShouldReturnListOfUsers() throws Exception {
+        // given
+        User user1 = User.builder().name("Alice").build();
+        User user2 = User.builder().name("Bob").build();
+        userRepository.save(user1);
+        userRepository.save(user2);
+
+        // when & then
+        mockMvc.perform(get("/api/users"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].username").value("Alice"))
+                .andExpect(jsonPath("$[1].username").value("Bob"));
+    }
+
+    @Test
+    void updateUser_ShouldModifyExistingUser() throws Exception {
+        // given
+        User user = User.builder()
+                .name("Old Name")
+                .build();
+        user = userRepository.save(user);
+
+        UserDto updatedDto = UserDto.builder()
+                .username("New Name")
+                .build();
+        String updatedJson = objectMapper.writeValueAsString(updatedDto);
+
+        // when & then
+        mockMvc.perform(put("/api/users/{id}", user.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatedJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(user.getId()))
+                .andExpect(jsonPath("$.username").value("New Name"));
+    }
+
+
 }
 
