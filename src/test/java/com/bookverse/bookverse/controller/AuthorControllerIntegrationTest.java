@@ -19,9 +19,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:application-test.yml")
+//@TestPropertySource(locations = "classpath:application-test.yml") //if you dont use H2 with application-test config  not necessary
 @Transactional
-class AuthorControllerIntegrationTest {
+class AuthorControllerIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

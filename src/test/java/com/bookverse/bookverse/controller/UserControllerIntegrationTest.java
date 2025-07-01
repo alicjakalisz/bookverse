@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -22,9 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest //You need to make sure this test class is in the same package or a subpackage of BookverseApplication, OR tell Spring explicitly where to look:
 @AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:application-test.yml")
+//@TestPropertySource(locations = "classpath:application-test.yml")//if you dont use H2 with application-test config  not necessary
 @Transactional
-class UserControllerIntegrationTest {
+class UserControllerIntegrationTest extends AbstractIntegrationTest{
 
     @Autowired
     private MockMvc mockMvc;
