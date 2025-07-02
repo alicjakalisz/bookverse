@@ -1,23 +1,13 @@
-server:
-  port: 8080
 spring:
   datasource:
-    url: jdbc:h2:mem:bookverse-db
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:mysql://localhost:3306/bookverse
+    username: user
+    password: password
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop  # or validate/create-drop depending on your needs
     show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      enabled: true
-      settings:
-        trace: true
-      path: /h2-console
-#      localhost:8080/h2-console
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
 
-  flyway:
-    enabled: false  # 👈 TEMPORARILY DISABLE FLYWAY UNTIL DB IS STABLE
