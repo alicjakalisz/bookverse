@@ -1,0 +1,16 @@
+# docker-compose.jenkins.yml
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    ports:
+      - "8081:8080"   # Jenkins UI
+      - "50000:50000" # Agent communication
+    volumes:
+#      Even if you docker-compose down or rebuild the image, the data persists.
+      - jenkins_home:/var/jenkins_home # Persist Jenkins data on host - When you run Jenkins in Docker, all jobs, plugins, credentials, and settings are stored in the container's /var/jenkins_home directory.If you're not mounting that as a volume, the data will be lost when the container is removed.
+      - /var/run/docker.sock:/var/run/docker.sock  # So Jenkins can run Docker
+
+volumes:
+  jenkins_home:
