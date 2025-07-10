@@ -4,61 +4,47 @@ pipeline {
     environment {
         IMAGE_NAME = 'bookverse-app'
         IMAGE_TAG = 'latest'
-        DOCKERHUB_CREDENTIALS = 'dockerhub-creds' // optional
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'github-creds', url: 'https://github.com/your-username/bookverse.git'
+                git url: 'https://github.com/alicjakalisz/bookverse.git', credentialsId: 'github-creds'
             }
         }
 
-        stage('Build JAR') {
+        stage('Unit & Integration Tests') {
             steps {
-                sh './mvnw clean package -DskipTests=false'
+                sh './mvnw clean verify'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
-                }
+                sh 'docker build -t bookverse-app:latest .'
             }
         }
 
-        stage('Run Integration Tests') {
+        stage('Start MySQL') {
             steps {
-                sh 'docker-compose -f docker-compose.yml up -d mysql'
-                sh './mvnw verify'
+                sh 'docker-compose down || true'     // Cleanup previous state (optional)
+                sh 'docker-compose up -d mysql'
+                sh 'sleep 15'  // give MySQL time to be ready
             }
         }
 
-        stage('Deploy Locally with Docker Compose') {
+        stage('Run App Container') {
             steps {
-                sh 'docker-compose down'
-                sh 'docker-compose up -d --build'
+                sh 'docker run -d --name bookverse-app --network bookverse_net -p 8090:8080 bookverse-app:latest'
             }
         }
-
-        // Optional: Push image to DockerHub
-        // Uncomment if you want to push
-        /*
-        stage('Push to DockerHub') {
-            steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
-                        docker.image("${IMAGE_NAME}:${IMAGE_TAG}").push()
-                    }
-                }
-            }
-        }
-        */
     }
 
     post {
         always {
+            echo 'Cleaning up...'
+            sh 'docker stop bookverse-app || true'
+            sh 'docker rm bookverse-app || true'
             sh 'docker-compose down'
             cleanWs()
         }

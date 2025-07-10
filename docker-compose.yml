@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   mysql:
     image: mysql:8.0
@@ -13,21 +15,8 @@ services:
     networks:
       - bookverse_net
 
-  app:
-    build: .  # Dockerfile in the root directory
-    ports:
-      - "8090:8080"  # Maps host 8090 to container's 8080
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bookverse
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
-    depends_on:
-      - mysql
-    networks:
-      - bookverse_net
+networks:
+  bookverse_net:
 
 volumes:
   mysql_data:
-
-networks:
-  bookverse_net:
