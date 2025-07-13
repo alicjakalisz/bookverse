@@ -1,5 +1,14 @@
 pipeline {
-    agent any
+    agent {
+        // Use an agent that is a Docker container.
+        // This image should have your build tools (e.g., Maven/JDK).
+        docker {
+            image 'maven:3.9-eclipse-temurin-17' // An example image with Maven and Java 17
+            // This is the crucial part!
+            // It maps the host's docker.sock to the container's docker.sock
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     environment {
         IMAGE_NAME = 'bookverse-app'
